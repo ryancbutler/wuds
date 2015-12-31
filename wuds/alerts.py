@@ -20,6 +20,8 @@ def alert_sms(**kwargs):
 
 import urllib
 import urllib2
+import requests
+import json
 
 def alert_pushover(**kwargs):
     msg = 'Proximity alert! A foreign device (%s - %s) has been detected on the premises.' % (kwargs['bssid'], kwargs['oui'])
@@ -27,3 +29,17 @@ def alert_pushover(**kwargs):
     payload = {'token': PUSHOVER_API_KEY, 'user': PUSHOVER_USER_KEY, 'message': msg}
     payload = urllib.urlencode(payload)
     resp = urllib2.urlopen(url, data=payload)
+
+def alert_telegram(**kwargs):
+    msg = 'Proximity alert! A foreign device (%s - %s) has been detected on the premises.' % (kwargs['bssid'], kwargs['oui'])
+    url = 'https://api.telegram.org/bot%s/sendMessage?chat_id=%s' % (TELEGRAM_BOT_TOKEN, TELEGRAM_GROUP_ID)
+    payload = {'text': msg}
+    payload = urllib.urlencode(payload)
+    resp = urllib2.urlopen(url, data=payload)
+
+def alert_pushbullet(**kwargs):
+    msg = 'Proximity alert! A foreign device (%s - %s) has been detected on the premises.' % (kwargs['bssid'], kwargs['oui'])
+    url = 'https://api.pushbullet.com/v2/pushes'
+    payload = {'type': 'note', 'title': 'WUDS', 'body': msg}
+    payload = json.dumps(payload)
+    resp = requests.post(url, data=payload, headers={'Authorization': 'Bearer ' + PUSHBULLET_API_KEY, 'Content-Type': 'application/json'})
