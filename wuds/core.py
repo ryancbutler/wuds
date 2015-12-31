@@ -51,7 +51,8 @@ def log_probe(bssid, rssi, essid):
     log(1, (bssid, rssi, essid, oui))
 
 def is_admin_oui(mac):
-    return int(mac.split(':')[0], 16) & 2
+#   NOT WORKING AS EXPECTED return int(mac.split(':')[0], 16) & 2
+    return 0
 
 def resolve_oui(mac):
     # check if mac vendor has already been resolved
@@ -71,6 +72,7 @@ def resolve_oui(mac):
                 else:
                     raise Exception('Invalid response code: %d' % (resp.code))
                 log_message(0, 'OUI resolved. [%s => %s]' % (mac, ouis[mac]))
+		print "MAC FOUND: %s" % mac
             except Exception as e:
                 log_message(1, 'OUI resolution failed. [%s => %s]' % (mac, str(e)))
                 # return, but don't store the value
@@ -132,7 +134,6 @@ def packet_handler(pkt):
                 if LOG_LEVEL == 4: log_probe(*data)
                 alerts[bssid] = datetime.now()
                 call_alerts(bssid=bssid, rssi=rssi, essid=essid, oui=resolve_oui(bssid))
-
 # connect to the wuds database
 # wuds runs as root and should be able to write anywhere
 with sqlite3.connect(LOG_FILE) as conn:
@@ -155,6 +156,6 @@ with sqlite3.connect(LOG_FILE) as conn:
             except KeyboardInterrupt:
                 break
             except:
-                if DEBUG: print traceback.format_exec()
+                if DEBUG: print traceback.format_exc()
                 continue
         log_message(0, 'WUDS stopped.')

@@ -40,15 +40,17 @@ LOG_FILE = 'log.db'
 LOG_LEVEL = 3
 
 # (BOOL) Enable/Disable stdout debugging messages
-DEBUG = True
+DEBUG = False
 
 #========
 # ALERTS
 #========
 
 # (BOOL) Enable/Disable alert modules
-ALERT_SMS = True
-ALERT_PUSHOVER = True
+ALERT_SMS = False
+ALERT_PUSHOVER = False
+ALERT_TELEGRAM = False
+ALERT_PUSHBULLET = False
 
 #==================
 # ALERT_SMS CONFIG
@@ -71,3 +73,16 @@ SMS_EMAIL = ''
 # (STR) API and User keys from pushover.net
 PUSHOVER_API_KEY = ''
 PUSHOVER_USER_KEY = ''
+
+#=======================
+# ALERT_TELEGRAM CONFIG
+#=======================
+
+# (STR) API and room keys for telegram
+TELEGRAM_BOT_TOKEN = ''
+TELEGRAM_GROUP_ID = '' 
+
+#=======================
+# ALERT_PUSHBULLET CONFIG
+#=======================
+PUSHBULLET_API_KEY = ''
